@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            text-align: center;
+            max-width: 500px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        .admin {
+            font-weight: bold;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-form">
+        <h1>Inicio de Sesión</h1>
+        <label for="login-nombre">Nombre de usuario:</label>
+        <input type="text" id="login-nombre" placeholder="Nombre">
+        <label for="login-contrasena">Contraseña:</label>
+        <input type="password" id="login-contrasena" placeholder="Contraseña">
+        <button onclick="iniciarSesion()">Iniciar Sesión</button>
+        <p id="login-resultado"></p>
+    </div>
+
+    <div class="container hidden" id="bienvenida">
+        <h1>¡Bienvenido!</h1>
+        <p id="mensaje-bienvenida"></p>
+    </div>
+
+    <script>
+        const usuariosRegistrados = [
+            { nombre: "jonathangiz", contrasena: "jonathanb", admin: true }
+        ];
+
+        function iniciarSesion() {
+            var nombre = document.getElementById("login-nombre").value.trim();
+            var contrasena = document.getElementById("login-contrasena").value.trim();
+            var resultado = document.getElementById("login-resultado");
+
+            var nombreLower = nombre.toLowerCase();
+            var contrasenaLower = contrasena.toLowerCase();
+
+            if (nombre === "" || contrasena === "") {
+                resultado.textContent = "Nombre y contraseña no pueden estar vacíos.";
+                resultado.className = "error";
+            } else if (nombreLower.includes("giz") || contrasenaLower.includes("giz")) {
+                resultado.textContent = "No estás autorizado por JonathanGIZ.";
+                resultado.className = "error";
+            } else {
+                const usuario = usuariosRegistrados.find(user => user.nombre === nombreLower && user.contrasena === contrasenaLower);
+                if (usuario) {
+                    if (usuario.admin) {
+                        document.getElementById("mensaje-bienvenida").innerHTML = '<span class="admin">¡Bienvenido JonathanGIZ (Admin)!</span>';
+                    } else {
+                        document.getElementById("mensaje-bienvenida").textContent = "¡Bienvenido, " + nombre + "!";
+                    }
+
+                    // Oculta el formulario de login
+                    document.getElementById("login-form").classList.add("hidden");
+
+                    // Muestra el mensaje de bienvenida
+                    document.getElementById("bienvenida").classList.remove("hidden");
+                } else {
+                    resultado.textContent = "Nombre de usuario o contraseña incorrectos.";
+                    resultado.className = "error";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
